@@ -31,3 +31,4 @@ class Choice(models.Model):
 
     def __str__(self):
         return 'Choice for : {}'.format(self.question.question_text)
+

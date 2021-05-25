@@ -1,13 +1,13 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404,render
+from django.shortcuts import get_object_or_404,render,redirect
 from django.http import HttpResponse, Http404
 from django.urls import reverse
-
-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login,logout
 from .models import Question, Choice
 
 # forms
-from .forms import ChoiceForm, QuestionForm, CreateQuestionForm
+from .forms import ChoiceForm, QuestionForm, CreateQuestionForm #,UserForm
 
 # Create your views here.
 
@@ -97,3 +97,17 @@ def create_new_question(request):
 
     return render(request = request, template_name=template, context = context)
 
+
+def signup(request):
+    #template = 'registration/signup.html'
+    #context = {'form':form}
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('polls:home')
+    else:
+        form = UserCreationForm()
+    
+    return render(request,'polls/newuser.html',{'form':form})
